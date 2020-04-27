@@ -14,14 +14,11 @@ const entryText = document.getElementById('entry-text');
 const ol = document.getElementById("movie-list");
 const deleteMovieModal = document.getElementById('delete-modal');
 
-
-
 const toggleBackDrop = () => {
     backDrop.classList.toggle("visible");
 };
 
-function closeMovieModal ()
-{
+function closeMovieModal() {
     addMovieModal.classList.remove("visible");
 }
 
@@ -66,9 +63,10 @@ const deleteMovie = (movieId) => {
     movies.splice(movieIndex, 1);// movieIndex is removed from array
     ol.children[movieIndex].remove();
     //ol.removeChild(ol.children[movieIndex]); //for old browsers 
+    closeMovieDeletionModal();
 }
 
-const closeMovieDeletionModal =() =>{
+const closeMovieDeletionModal = () => {
     toggleBackDrop();
     deleteMovieModal.classList.remove('visible');
 }
@@ -77,6 +75,10 @@ const deleteMovieHandler = (movieId) => {
     deleteMovieModal.classList.add('visible');
     toggleBackDrop();
     // deleteMovie(movieId);
+    const cancelDeletionButton = deleteMovieModal.querySelector('.btn--passive');
+    const confirmDelettionButton = deleteMovieModal.querySelector('.btn--danger');
+    cancelDeletionButton.addEventListener('click',closeMovieDeletionModal);
+    confirmDelettionButton.addEventListener('click',deleteMovie.bind(null,movieId));
 }
 
 const addliFunction = (id, title, image, rating) => {
