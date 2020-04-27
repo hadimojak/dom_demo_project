@@ -3,32 +3,42 @@ const addMovieModal = document.getElementById("add-modal");
 // const addMovieModal = document.body.children[1];
 const startAddMovie = document.querySelector("header button");
 // const startAddMovie = document.querySelector("header").lastElementChild;
-
 const backDrop = document.getElementById("backdrop");
 // const backDrop = document.body.firstElementChild;
-
 const addModalCancelButton = addMovieModal.querySelector(".btn--passive");
 const addModalAddButton = addModalCancelButton.nextElementSibling;
 const userInputs = addMovieModal.querySelectorAll("input");
 //const userInputs = addMovieModal.getElementsByTagName('input');
 const movies = [];
 const entryText = document.getElementById('entry-text');
+const ol = document.getElementById("movie-list");
+const deleteMovieModal = document.getElementById('delete-modal');
+
+
 
 const toggleBackDrop = () => {
     backDrop.classList.toggle("visible");
 };
 
-function toggleMovieModal() {
-    addMovieModal.classList.toggle("visible");
+function closeMovieModal ()
+{
+    addMovieModal.classList.remove("visible");
+}
+
+function showMovieModal() {
+    addMovieModal.classList.add("visible");
     toggleBackDrop();
 }
 
 const backDropClickHandler = () => {
-    toggleMovieModal();
+    closeMovieModal();
+    closeMovieDeletionModal();
 };
+
 const cancelAddMovie = () => {
-    toggleMovieModal();
+    closeMovieModal();
 };
+
 const clearInputs = () => {
     // userInputs[0].value = '';
     // userInputs[1].value = '';
@@ -38,25 +48,50 @@ const clearInputs = () => {
     }
 
 };
+
 const updateUI = () => {
     if (movies.length === 0) {
         return;
     } else { entryText.classList.toggle('visible'); }
 }
 
-const addliFunction = (title,image,rating) => {
-    const ol = document.getElementById("movie-list");
+const deleteMovie = (movieId) => {
+    let movieIndex = 0;
+    for (const movie of movies) {
+        if (movie.id === movieId) {
+            break;
+        }
+        movieIndex++;
+    }
+    movies.splice(movieIndex, 1);// movieIndex is removed from array
+    ol.children[movieIndex].remove();
+    //ol.removeChild(ol.children[movieIndex]); //for old browsers 
+}
+
+const closeMovieDeletionModal =() =>{
+    toggleBackDrop();
+    deleteMovieModal.classList.remove('visible');
+}
+
+const deleteMovieHandler = (movieId) => {
+    deleteMovieModal.classList.add('visible');
+    toggleBackDrop();
+    // deleteMovie(movieId);
+}
+
+const addliFunction = (id, title, image, rating) => {
     const li = document.createElement('li');
-    li.className='movie-element';
-    li.innerHTML=`
+    li.className = 'movie-element';
+    li.innerHTML = `
     <div class='movie-element__image'>
         <img src='${image}' alt='${title}' title='${title}'>
     </div>
     <div class='movie-element__info' >
-    <h2> ${title}</h2>
-    <p>${rating}/5 starts</p>
+        <h2> ${title}</h2>
+        <p>${rating}/5 starts</p>
     </div>
     `;
+    li.addEventListener('click', deleteMovieHandler.bind(null, id));
     ol.append(li);
 };
 
@@ -79,16 +114,22 @@ const addMovieHandler = () => {
         alert("bad input!");
         return;
     }
-    const newMovie = { title: title, image: image, rating: rating };
+    const newMovie = {
+        id: Math.random().toString(),
+        title: title,
+        image: image,
+        rating: rating
+    };
     movies.push(newMovie);
     console.log(movies);
-    toggleMovieModal();
+    closeMovieModal();
+    toggleBackDrop();
     clearInputs();
-    addliFunction(newMovie.title,newMovie.image,newMovie.rating);
+    addliFunction(newMovie.id, newMovie.title, newMovie.image, newMovie.rating);
     updateUI();
 };
 
-startAddMovie.addEventListener("click", toggleMovieModal);
+startAddMovie.addEventListener("click", showMovieModal);
 backDrop.addEventListener("click", backDropClickHandler);
 addModalCancelButton.addEventListener("click", cancelAddMovie);
 addModalAddButton.addEventListener("click", addMovieHandler);
