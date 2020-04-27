@@ -193,6 +193,7 @@ input:focus {
   text-align: center;
 }
 
+
 #movie-list {
   list-style: none;
   width: 40rem;
@@ -237,4 +238,8 @@ input:focus {
   to {
     transform: translateY(0);
   }
+}
+
+.visible { 
+  display: none;
 }
