@@ -54,6 +54,20 @@ const updateUI = () => {
   } else {
     entryText.classList.add("visible");
   }
+    // userInputs[0].value = '';
+    // userInputs[1].value = '';
+    // userInputs[2].value = '';
+    for (const userInput of userInputs) {
+        userInput.value = "";
+    }
+};
+
+const updateUI = () => {
+    if (movies.length === 0) {
+        return;
+    } else {
+        entryText.classList.toggle("visible");
+    }
 };
 
 const deleteMovie = (movieId) => {
@@ -95,10 +109,12 @@ const deleteMovieHandler = (movieId) => {
   );
 };
 
+
+
 const addliFunction = (id, title, image, rating) => {
-  const li = document.createElement("li");
-  li.className = "movie-element";
-  li.innerHTML = `
+    const li = document.createElement("li");
+    li.className = "movie-element";
+    li.innerHTML = `
     <div class='movie-element__image'>
         <img src='${image}' alt='${title}' title='${title}'>
     </div>
@@ -143,6 +159,42 @@ const addMovieHandler = () => {
   clearInputs();
   addliFunction(newMovie.id, newMovie.title, newMovie.image, newMovie.rating);
   updateUI();
+    li.addEventListener("click", deleteMovieHandler.bind(null, id));
+    ol.append(li);
+};
+
+const addMovieHandler = () => {
+    // const x = addMovieModal.querySelector("#title").value;
+    // const y = addMovieModal.querySelector("#image-url").value; //just for test
+    // const z = addMovieModal.firstElementChild.lastElementChild.value;
+    // console.log(`${x}` + `${y}` + z);
+    const title = userInputs[0].value;
+    const image = userInputs[1].value;
+    const rating = userInputs[2].value;
+
+    if (
+        title.trim() === "" ||
+        image.trim() === "" ||
+        rating.trim() === "" ||
+        +rating < 1 ||
+        +rating > 5
+    ) {
+        alert("bad input!");
+        return;
+    }
+    const newMovie = {
+        id: Math.random().toString(),
+        title: title,
+        image: image,
+        rating: rating,
+    };
+    movies.push(newMovie);
+    console.log(movies);
+    closeMovieModal();
+    toggleBackDrop();
+    clearInputs();
+    addliFunction(newMovie.id, newMovie.title, newMovie.image, newMovie.rating);
+    updateUI();
 };
 
 startAddMovie.addEventListener("click", showMovieModal);
