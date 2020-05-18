@@ -48,13 +48,12 @@ const clearInputs = () => {
   }
 };
 
-
 const updateUI = () => {
-    if (movies.length === 0) {
-        return;
-    } else {
-        entryText.classList.toggle("visible");
-    }
+  if (movies.length === 0) {
+    entryText.classList.remove("visible");
+  } else {
+    entryText.classList.add("visible");
+  }
 };
 
 const deleteMovie = (movieId) => {
@@ -88,18 +87,19 @@ const deleteMovieHandler = (movieId) => {
   confirmDelettionButton = deleteMovieModal.querySelector(".btn--danger");
 
   // confirmDelettionButton.removeEventListener('click', deleteMovie.bind(null, movieId)); //will not work
+  cancelDeletionButton.removeEventListener("click", closeMovieDeletionModal);
   cancelDeletionButton.addEventListener("click", closeMovieDeletionModal);
-  cancelDeletionButton.addEventListener("click", closeMovieDeletionModal);
+
   confirmDelettionButton.addEventListener(
     "click",
     deleteMovie.bind(null, movieId)
   );
-};  
+};
 
 const addliFunction = (id, title, image, rating) => {
-    const li = document.createElement("li");
-    li.className = "movie-element";
-    li.innerHTML = `
+  const li = document.createElement("li");
+  li.className = "movie-element";
+  li.innerHTML = `
     <div class='movie-element__image'>
         <img src='${image}' alt='${title}' title='${title}'>
     </div>
@@ -113,37 +113,37 @@ const addliFunction = (id, title, image, rating) => {
 };
 
 const addMovieHandler = () => {
-    // const x = addMovieModal.querySelector("#title").value;
-    // const y = addMovieModal.querySelector("#image-url").value; //just for test
-    // const z = addMovieModal.firstElementChild.lastElementChild.value;
-    // console.log(`${x}` + `${y}` + z);
-    const title = userInputs[0].value;
-    const image = userInputs[1].value;
-    const rating = userInputs[2].value;
+  // const x = addMovieModal.querySelector("#title").value;
+  // const y = addMovieModal.querySelector("#image-url").value; //just for test
+  // const z = addMovieModal.firstElementChild.lastElementChild.value;
+  // console.log(`${x}` + `${y}` + z);
+  const title = userInputs[0].value;
+  const image = userInputs[1].value;
+  const rating = userInputs[2].value;
 
-    if (
-        title.trim() === "" ||
-        image.trim() === "" ||
-        rating.trim() === "" ||
-        +rating < 1 ||
-        +rating > 5
-    ) {
-        alert("bad input!");
-        return;
-    }
-    const newMovie = {
-        id: Math.random().toString(),
-        title: title,
-        image: image,
-        rating: rating,
-    };
-    movies.push(newMovie);
-    console.log(movies);
-    closeMovieModal();
-    toggleBackDrop();
-    clearInputs();
-    addliFunction(newMovie.id, newMovie.title, newMovie.image, newMovie.rating);
-    updateUI();
+  if (
+    title.trim() === "" ||
+    image.trim() === "" ||
+    rating.trim() === "" ||
+    +rating < 1 ||
+    +rating > 5
+  ) {
+    alert("bad input!");
+    return;
+  }
+  const newMovie = {
+    id: Math.random().toString(),
+    title: title,
+    image: image,
+    rating: rating,
+  };
+  movies.push(newMovie);
+  console.log(movies);
+  closeMovieModal();
+  toggleBackDrop();
+  clearInputs();
+  addliFunction(newMovie.id, newMovie.title, newMovie.image, newMovie.rating);
+  updateUI();
 };
 
 startAddMovie.addEventListener("click", showMovieModal);
